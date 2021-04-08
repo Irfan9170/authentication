@@ -3,7 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose")
 const bodyparser = require("body-parser");
 const ejs = require("ejs");
-
+const encrypt = require("mongoose-encryption")
 
 
 const app=express();
@@ -18,7 +18,9 @@ mongoose.connect("mongodb://localhost:27017/users",{useNewUrlParser:true,useUnif
 const userSchema = new mongoose.Schema({
     email:String,
     password:String
-})
+});
+const key = "Thisismyfirstencryptkeywithauthentication"
+userSchema.plugin(encrypt, { secret:key,encryptedFields: ['password'] });
 const User = mongoose.model("User",userSchema);
 
 app.get("/",(req,res)=>{
